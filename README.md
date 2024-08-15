@@ -13,7 +13,7 @@ Like the heading might suggest, this is a simple inventory management system pro
 
 # Demos:
 
-This is the main view which the user sees when they successfully log in.
+This is the main view which the user sees when they successfully log in. (Sample data in the video's database view.)
 
 https://github.com/user-attachments/assets/a4050fb6-7038-42b0-aacc-2bcd06b560cd
 
