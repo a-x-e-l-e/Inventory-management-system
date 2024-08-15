@@ -1,6 +1,6 @@
 # Inventory management system
 
-Like the heading might suggest, this is a simple inventory management system project, which includes database management, account management, and user management for the admin ( without forgetting pretty visuals, of course).
+Like the heading might suggest, this is a simple inventory management system project, which includes database management, account management, and user management for the admin (without forgetting pretty visuals, of course).
 
 ## Requirements 
 
