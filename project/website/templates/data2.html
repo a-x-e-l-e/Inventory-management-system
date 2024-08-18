@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selaa tietokantaa</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='/css/styles.css')}}">
+
+    <script src="{{url_for('static', filename='/javascript/scripts.js')}}" defer></script>
+    <script src="{{url_for('static', filename='/javascript/cube_scripts.js')}}" defer></script>
+
+</head>
+<body id="data_page">
+    
+    <div class="search-container">
+        <div class="search-icon">
+            <div class="circle"></div>
+            <div class="handle"></div>
+        </div>
+        <input class="search-bar" type="search" id="search" name="search" placeholder="Hae tietokannasta" data-search oninput="searchFor()" >
+    </div>
+
+    <div class="flash-container">
+            
+        {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    
+                {% endif %}
+            {% endwith %}
+    </div>
+
+    <div class="top-bar" id="topBar">
+        <div class="menu-icon" id="menuIcon" onclick="toggleMenu()">
+            <span></span>
+        </div>
+        <div class="menu" id="menu">
+            
+            <button onclick="handleButtonClick(event, '/')">Selaa</button>
+            {% if current_user.admin == true %}
+            <button onclick="handleButtonClick(event, '/admin')">Admin</button>
+            {% endif %}
+            <button onclick="handleButtonClick(event, '/account')">Tili</button>
+            <button onclick="handleButtonClick(event, '/logout')">Kirjaudu ulos</button>
+            
+        </div>
+        
+        
+    </div>
+    <div class="spacer-div"></div>
+    <div class="outer-container">
+        
+            <div class="cube-container" id="cubeContainer">
+                <div class="cube" id="cube">
+                <div class="cube-face" id="frontFace">
+            
+                </div> 
+
+                <div class="cube-face">
+                    
+                </div>
+                <div class="cube-face">
+                    
+                </div>
+                <div class="cube-face">
+                    
+                </div>
+                <div class="cube-face">
+                    
+                </div>
+                <div class="cube-face">
+                    
+                </div>
+                </div>
+
+
+                <div class="table-wrapper">
+                        <h2>Tässä näkymässä voit selata tietokantaan tallennettuja tavaroita</h2>
+                    <div class="table-container">
+                        
+                        <table>
+                            <thead>
+                                <tr class="table-header">
+                                    <th>ID</th>
+                                    <th>Nimi</th>
+                                    <th>Malli</th>
+                                    <th>Valmistaja</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in all_items %}
+                                <tr class="table-row" data-id="{{ item.tavaraID }}" onclick="getItemID(this)">
+                                    <td class="tavaraid" data-id=" {{ item.tavaraID }}">{{ item.tavaraID }}</td>
+                                    <td class="tavaranimi" data-id="{{ item.tavaraNimi }}">{{ item.tavaraNimi }}</td>
+                                    <td class="tavaramalli" data-id="{{ item.tavaraMalli }}">{{ item.tavaraMalli }}</td>
+                                    <td class="tavaravalmistaja" data-id="{{ item.tavaraValmistaja }}">{{ item.tavaraValmistaja }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                    <div class="button-group">
+                        <button onclick="handleButtonClick(event, 'create_new')">Luo uusi</button>
+                        <button onclick="openInfoEdit()">Lisätietoja/Muokkaa</button>
+                        <form class="delete-button" id="deleteForm" action="/deleted" method="POST" onsubmit="validateSelection(event)">
+                            <input type="hidden" id="itemIDSelected" name="itemID" value="">
+                            <button type="submit">Poista</button>
+                        </form>   
+                    </div>
+                    
+
+                </div>
+                    
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

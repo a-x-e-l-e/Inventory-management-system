@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lisätietoja/Muokkaa</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='/css/styles.css')}}">
+
+    <script src="{{url_for('static', filename='/javascript/scripts.js')}}" defer></script>
+    <script src="{{url_for('static', filename='/javascript/cube_scripts.js')}}" defer></script>
+</head>
+<body id="infoedit_page">
+    <div class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    
+                {% endif %}
+            {% endwith %}
+        </div>
+
+    <div class="top-bar" id="topBar">
+        <div class="menu-icon" id="menuIcon" onclick="toggleMenu()">
+            <span></span>
+        </div>
+        <div class="menu" id="menu">
+            
+            <button onclick="handleButtonClick(event, '/')">Selaa</button>
+            {% if current_user.admin == true %}
+            <button onclick="handleButtonClick(event, '/admin')">Admin</button>
+            {% endif %}
+            <button onclick="handleButtonClick(event, '/account')">Tili</button>
+            <button onclick="handleButtonClick(event, '/logout')">Kirjaudu ulos</button>
+            
+        </div>
+        
+    </div>
+    <div class="spacer-div"></div>
+    <div class="outer-container" id="outerContainer">
+        
+        <div class="cube-container" id="cubeContainer">
+            <div class="cube" id="cube">
+            <div class="cube-face" id="frontFace">
+                    
+                <h2>Tässä näkymässä voit tarkastella ja muuttaa tietokantaan tallennetun tavaran tietoja</h2>
+                <br>
+                <form id="infoeditform" method="POST" class="login-form" onsubmit="return handleSubmit(event, 'infoeditform')" novalidate>
+                    {{ form.hidden_tag() }}
+                    <h3>Tavaran tiedot</h3>
+                    <div class="input-container">
+                        {% if form.item_name.errors %}
+                            {{ form.item_name(style="border: 1px solid #e57373;", placeholder=" ") }}
+                            {{ form.item_name.label }}
+                            <div class="invalid-feedback">{{ form.item_name.errors[0] }}</div>
+                        {% else %}
+                            {{ form.item_name(placeholder=" ") }}
+                            {{ form.item_name.label }}
+                        {% endif %}
+                    </div>
+                    <div class="input-container">
+                        {% if form.item_model.errors %}
+                            {{ form.item_model(style="border: 1px solid #e57373;", placeholder=" ") }}
+                            {{ form.item_model.label }}
+                            <div class="invalid-feedback">{{ form.item_model.errors[0] }}</div>
+                        {% else %}
+                            {{ form.item_model(placeholder=" ") }}
+                            {{ form.item_model.label }}
+                        {% endif %}
+                    </div>
+                    <div class="input-container">
+                        {% if form.item_manufacturer.errors %}
+                            {{ form.item_manufacturer(style="border: 1px solid #e57373;", placeholder=" ") }}
+                            {{ form.item_manufacturer.label }}
+                            <div class="invalid-feedback">{{ form.item_manufacturer.errors[0] }}</div>
+                        {% else %}
+                            {{ form.item_manufacturer(placeholder=" ") }}
+                            {{ form.item_manufacturer.label }}
+                        {% endif %}
+                    </div>
+                    <div class="date-container">
+                        {% if form.can_be_thrown_away.errors %}
+                            {{ form.can_be_thrown_away(style="border: 1px solid #e57373;", placeholder=" ") }}
+                            {{ form.can_be_thrown_away.label }}
+                            <div class="invalid-feedback">{{ form.can_be_thrown_away.errors[0] }}</div>
+                        {% else %}
+                            {{ form.can_be_thrown_away(placeholder=" ") }}
+                            {{ form.can_be_thrown_away.label }}
+                        {% endif %}
+                    </div>
+                    <div class="date-container">
+                        {% if form.warranty.errors %}
+                            {{ form.warranty(class="datepicker", style="border: 1px solid #e57373;", placeholder=" ") }}
+                            {{ form.warranty.label }}
+                            <div class="invalid-feedback">{{ form.warranty.errors[0] }}</div>
+                        {% else %}
+                            {{ form.warranty(placeholder=" ") }}
+                            {{ form.warranty.label }}
+                        {% endif %}
+                    </div>
+                        
+                    <h3>Tavaran omistajan tiedot</h3>
+                    <div class="input-container">
+                        {% if form.owner_name.errors %}
+                            {{ form.owner_name(style="border: 1px solid #e57373;", placeholder=" ") }}
+                            {{ form.owner_name.label }}
+                            <div class="invalid-feedback">{{ form.owner_name.errors[0] }}</div>
+                        {% else %}
+                            {{ form.owner_name(placeholder=" ") }}
+                            {{ form.owner_name.label }}
+                        {% endif %}
+                    </div>
+                    <div class="input-container">
+                        {% if form.owner_email.errors %}
+                            {{ form.owner_email(style="border: 1px solid #e57373;", placeholder=" ") }}
+                            {{ form.owner_email.label }}
+                            <div class="invalid-feedback">{{ form.owner_email.errors[0] }}</div>
+                        {% else %}
+                            {{ form.owner_email(placeholder=" ") }}
+                            {{ form.owner_email.label }}
+                        {% endif %}
+                    </div>
+                    <h3>Tavaran käyttäjän tiedot</h3>
+                    <div class="input-container">
+                        {% if form.user_name.errors %}
+                            {{ form.user_name(style="border: 1px solid #e57373;", placeholder=" ") }}
+                            {{ form.user_name.label }}
+                            <div class="invalid-feedback">{{ form.user_name.errors[0] }}</div>
+                        {% else %}
+                            {{ form.user_name(placeholder=" ") }}
+                            {{ form.user_name.label }}
+                        {% endif %}
+                    </div>
+                    <div class="input-container">
+                        {% if form.user_email.errors %}
+                            {{ form.user_email(style="border: 1px solid #e57373;", placeholder=" ") }}
+                            {{ form.user_email.label }}
+                            <div class="invalid-feedback">{{ form.user_email.errors[0] }}</div>
+                        {% else %}
+                            {{ form.user_email(placeholder=" ") }}
+                            {{ form.user_email.label }}
+                        {% endif %}
+                    </div>
+                    <h3>Hankkeen tiedot</h3>
+                    <div class="input-container">
+                        {% if form.project_name.errors %}
+                            {{ form.project_name(style="border: 1px solid #e57373;", placeholder=" ") }}
+                            {{ form.project_name.label }}
+                            <div class="invalid-feedback">{{ form.project_name.errors[0] }}</div>
+                        {% else %}
+                            {{ form.project_name(placeholder=" ") }}
+                            {{ form.project_name.label }}
+                        {% endif %}
+                    </div>
+                    <div class="input-container">
+                        {% if form.project_manager.errors %}
+                            {{ form.project_manager(style="border: 1px solid #e57373;", placeholder=" ") }}
+                            {{ form.project_manager.label }}
+                            <div class="invalid-feedback">{{ form.project_manager.errors[0] }}</div>
+                        {% else %}
+                            {{ form.project_manager(placeholder=" ") }}
+                            {{ form.project_manager.label }}
+                        {% endif %}
+                    </div>
+                    <div class="date-container">
+                        {% if form.start_date.errors %}
+                            {{ form.start_date(class="datepicker", style="border: 1px solid #e57373;", placeholder=" ") }}
+                            {{ form.start_date.label }}
+                            <div class="invalid-feedback">{{ form.start_date.errors[0] }}</div>
+                        {% else %}
+                            {{ form.start_date(class="datepicker", placeholder=" ") }}
+                            {{ form.start_date.label }}
+                        {% endif %}
+                    </div>
+                    <div class="date-container">
+                        {% if form.end_date.errors %}
+                            {{ form.end_date(class="datepicker", style="border: 1px solid #e57373;", placeholder=" ") }}
+                            {{ form.end_date.label }}
+                            <div class="invalid-feedback">{{ form.end_date.errors[0] }}</div>
+                        {% else %}
+                            {{ form.end_date(class="datepicker", placeholder=" ") }}
+                            {{ form.end_date.label }}
+                        {% endif %}
+                    </div>
+                    <div class="button-group">
+                        <button type="submit">Tallenna muutokset tietokantaan</button>
+                        <button onclick="handleButtonClick(event, '/')">Takaisin</button>
+                    </div>
+                </form>
+
+            </div> 
+
+            <div class="cube-face">
+                
+            </div>
+
+            <div class="cube-face">
+                
+            </div>
+
+            <div class="cube-face">
+                
+            </div>
+
+            <div class="cube-face">
+                
+            </div>
+
+            <div class="cube-face">
+                
+            </div>
+            
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
